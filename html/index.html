@@ -1,0 +1,44 @@
+<html>
+<head>
+    <!-- 開発バージョン、便利なコンソールの警告が含まれています -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- 本番バージョン、サイズと速度のために最適化されています -->
+    <!--script src="https://cdn.jsdelivr.net/npm/vue"></script-->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<style>
+.nonselect {
+    width: 150px;
+    background:#e8f0fd;
+}
+.selected {
+    width: 120px;
+    padding: 15px;
+    background: #e8f0fd;
+}
+
+</style>
+</head>
+<body>
+    <h1>特徴量モンスター得点計算サイト - トクモンセンターオンライン</h1>
+    <h2>プレイヤー1</h2>
+    <div id="cards">
+        <ul>
+            <li v-for="card in tokumon_cards">
+                {{ card.no }}.{{ card.name }}
+                <img :src="tokumonImgFile(card)" alt="" width="40%" v-on:click="selectTokumonCard(card)" :class="tokumonImgCss(card)" />
+            </li>
+        </ul>
+        <ul>
+            <li v-for="card in algorithm_cards">
+                {{ card.id }}.{{ card.name }}
+                <img :src="algorithmImgFile(card)" alt="" width="40%" v-on:click="selectAlgorithmCard(card)" :class="algorithmImgCss(card)" />
+            </li>
+        </ul>
+        <button v-on:click="getCalcScore">計算！</button>
+        <p>score: {{ score }}</p>
+    </div>
+      
+
+  <script src="./js/mlcard.js"></script>
+</body>
+</html>
