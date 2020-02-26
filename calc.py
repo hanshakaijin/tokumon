@@ -8,8 +8,14 @@ ml = mlCard.MlCard()
 def c():
     tokumon = request.args.get('tokumon').split(',')
     algorithm = request.args.get('algorithm')
-    score = ml.calc_cv_score(tokumon, int(algorithm))
-    return jsonify(score)
+    dummy = request.args.get('dummy').split(',')
+    fillna = request.args.get('fillna').split(',')
+    
+    features = [(t+"_fill_median" if (t in fillna) else t) for t in tokumon]
+    features = [(t+"_dummy" if (t.replace("_fill_median", '') in dummy) else t) for t in features]
+    print(features)
+    score = ml.calc_cv_score(features, int(algorithm))
+    return jsonify({k:("%2.1f" % (v*100)) for (k,v) in score.items()})
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

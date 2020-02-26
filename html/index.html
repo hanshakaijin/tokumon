@@ -1,44 +1,208 @@
-<html>
+<!doctype html>
+<html lang="jp">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=480, initial-scale=1, user-scalable=no" />
+    <!--meta name="viewport" content="width=480, initial-scale=1"-->
+
     <!-- 開発バージョン、便利なコンソールの警告が含まれています -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
     <!-- 本番バージョン、サイズと速度のために最適化されています -->
     <!--script src="https://cdn.jsdelivr.net/npm/vue"></script-->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<style>
-.nonselect {
-    width: 150px;
-    background:#e8f0fd;
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
+    
+    <!-- Load polyfills to support older browsers -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
+
+    <!-- Load Vue followed by BootstrapVue -->
+    <script src="https://unpkg.com/vue@latest/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+
+    <!-- Load the following for BootstrapVueIcons support -->
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
+
+
+    <style>
+body {
+  -webkit-text-size-adjust: 100%;
 }
-.selected {
-    width: 120px;
-    padding: 15px;
-    background: #e8f0fd;
+.card-arrange-tokumon{
+    clear: both;
+    display: block;
+    float: none;
+    position: relative;
+    height: 1320px; /*90*11+330*/
 }
+
+.card-stack{
+    position: absolute;
+    pointer-events: none;
+}
+.card-stack img{
+    position: relative;
+    width: 40%;
+}
+
+.card-stack .nonselect {
+    transform:translateX(0px);
+    transition-timing-function:ease-out;	
+	transition-duration:0.2s;
+    transform:rotate(-10deg) ;
+    opacity:0.8;
+}
+.card-stack .selected {
+    transform:translateX(133px);
+    transition-timing-function:ease-out;	
+	transition-duration:0.2s;
+    background-color: red;
+    padding: 3px;
+}
+
+.card-arrange-algorithm div:nth-child(even) .nonselect{
+    transform:translateX(0px);
+    left: 266px;
+    transform:rotate(10deg) ;
+
+}
+
+.card-arrange-algorithm div:nth-child(even) .selected{
+    transform:translateX(-133px);
+    left: 266px;
+}
+
+
+.tokumon_card{
+    display: inline;
+}
+
+.tokumon_card img, .algorithm_card img{
+    pointer-events: auto;
+}
+
+.ability_cards{
+    display: inline;
+}
+
+.ability_cards img{
+    position: absolute;
+}
+
+.dummy_selected{
+    left: 310px;
+    transform:translateX(-100px);
+    transition-timing-function:ease-out;	
+    top: 10px;
+    opacity:1;
+    transition-duration:0.2s;
+    background-color: red;
+    padding: 3px;
+    pointer-events: auto;
+}
+.dummy_none {
+    left: 310px;
+    transform:translateX(0px);
+    top: 10px;
+    opacity:0;
+    transition-duration:0.2s;
+    transform:rotate(10deg) 
+}
+
+.dummy_nonselect {
+    left: 310px;
+    top: 10px;
+    transition-duration:0.2s;
+    opacity:0.5;
+    pointer-events: auto;
+    transform:rotate(10deg) 
+
+}
+.fillna_selected{
+    left: 310px;
+    transform:translateX(-100px);
+    transition-timing-function:ease-out;	
+    top: 50px;
+    opacity:1;
+    transition-duration:0.2s;
+    background-color: red;
+    padding: 3px;
+    pointer-events: auto;
+}
+.fillna_none{
+    left: 310px;
+    top: 50px;
+    opacity:0;
+    transition-duration:0.2s;
+    pointer-events: none;
+    transform:rotate(10deg) 
+}
+
+.fillna_nonselect {
+    left: 310px;
+    top: 50px;
+    transition-duration:0.2s;
+    opacity:0.5;
+    pointer-events: auto;
+    transform:rotate(10deg) 
+}
+
+.card-arrange-algorithm{
+    clear: both;
+    display: block;
+    float: none;
+    position: relative;
+    height: 645px; /*45*7+330*/
+}
+
+.score-area{
+    height: 100px;
+}
+
 
 </style>
+
 </head>
 <body>
-    <h1>特徴量モンスター得点計算サイト - トクモンセンターオンライン</h1>
-    <h2>プレイヤー1</h2>
-    <div id="cards">
-        <ul>
-            <li v-for="card in tokumon_cards">
-                {{ card.no }}.{{ card.name }}
-                <img :src="tokumonImgFile(card)" alt="" width="40%" v-on:click="selectTokumonCard(card)" :class="tokumonImgCss(card)" />
-            </li>
-        </ul>
-        <ul>
-            <li v-for="card in algorithm_cards">
-                {{ card.id }}.{{ card.name }}
-                <img :src="algorithmImgFile(card)" alt="" width="40%" v-on:click="selectAlgorithmCard(card)" :class="algorithmImgCss(card)" />
-            </li>
-        </ul>
-        <button v-on:click="getCalcScore">計算！</button>
-        <p>score: {{ score }}</p>
+    <div class="container-fluid">
+        <h1>特徴量モンスター得点計算サイト - トクモンセンターオンライン</h1>
+        <h2>プレイヤー1</h2>
+        <div id="cards">
+            <p>選んだトクモン1枚以上と、それに紐づくのうりょくアップカードをタップしてください。</p>
+            <div class="card-arrange-tokumon">
+                <div class="card-stack" v-for="card in tokumon_cards" :style="tokumonCardImgStyle(card)" > 
+                    <div class="tokumon_card">
+                        <img :src="tokumonImgFile(card)" :alt="card.name" v-on:click="selectTokumonCard(card)" :class="tokumonImgCss(card)" />
+                    </div>
+                    <div class="ability_cards">
+                        <img src="./img/ability_dummy.png" v-on:click="selectDummyCard(card)" :class="dummyImgCss(card)"  />
+                        <img src="./img/ability_fillna.png" v-on:click="selectFillNACard(card)" :class="fillNAImgCss(card)"  />
+                    </div>
+                </div>
+            </div>
+            <p>選んだアルゴリズムマシンを1枚タップしてください。</p>
+            <div class="card-arrange-algorithm">
+                <div class="card-stack" v-for="card in algorithm_cards" :style="algorithmCardImgStyle(card)">
+                    <div class="algorithm_card">
+                        <img :src="algorithmImgFile(card)" :alt="card.name" v-on:click="selectAlgorithmCard(card)" :class="algorithmImgCss(card)" />
+                    </div>
+                </div>
+            </div>
+            <b-button v-on:click="getCalcScore" block variant="danger" :disabled="isButtonDisable">計算！</b-button>
+            <div class="score-area">
+                <div v-show="isLoading" class="text-center loading m-3">
+                    <b-spinner variant="danger" label="Text Centered"></b-spinner>
+                </div>
+                <div v-show="hasScore" class="text-center result m-3">
+                    <p>てきちゅうりつは</p><p class="h3">{{ getAccuracy }}%</p>
+                </div>
+            </div>
+        </div>
     </div>
-      
 
-  <script src="./js/mlcard.js"></script>
+
+
+    <script src="./js/mlcard.js"></script>
 </body>
 </html>

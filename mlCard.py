@@ -139,6 +139,10 @@ class MlCard():
             if f.endswith('_dummy'):
                 for ff in ["pclass","sex","embarked",'home.dest','cabin_head', 'cabin_isodd', 'name_honorific', 'boat', "embarked_fill_median",'home.dest_fill_median','cabin_head_fill_median', 'cabin_isodd_fill_median', 'boat_fill_median']:
                     if f == ff+"_dummy":
+                        use_features_dummy.extend([n for n in self.dummies_features_labels if (n.startswith(ff) and not n.startswith(ff+"_fill_median"))])
+                        break
+                for ff in ["embarked_fill_median",'home.dest_fill_median','cabin_head_fill_median', 'cabin_isodd_fill_median', 'boat_fill_median']:
+                    if f == ff+"_dummy":
                         use_features_dummy.extend([n for n in self.dummies_features_labels if n.startswith(ff)])
                         break
             else:
@@ -146,6 +150,7 @@ class MlCard():
 
         result = cross_validate(self.clf_s[algorithm-1], self.features.loc[:, use_features_dummy], self.target, cv = kfold, scoring = score_funcs)
         score = {}
+        print(use_features_dummy)
         for s in score_funcs:
             print(self.clf_s[algorithm-1].__class__.__name__ + ": " + str(result['test_' + s].mean()))
             score[s] = result['test_' + s].mean()
