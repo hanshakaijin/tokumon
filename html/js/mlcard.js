@@ -1,6 +1,7 @@
-var cards = new Vue({
-    el: '#cards',
-    data: {
+Vue.component('player', {
+  props: ['playerno'],
+  data: function () {
+    return {
       tokumon_cards: [
         { 
           no: 1,
@@ -128,120 +129,155 @@ var cards = new Vue({
       recent_select_card: null,
       score: null, 
       isLoading: false,
-    },
-    methods: {
-      selectTokumonCard : function(c){
-        if (this.selected_tokumon_cards.includes(c)){
-          this.selected_tokumon_cards = this.selected_tokumon_cards.filter(n => n !== c);
-          this.selected_dummy_cards = this.selected_dummy_cards.filter(n => n !== c);
-          this.selected_fillna_cards = this.selected_fillna_cards.filter(n => n !== c);
-          this.recent_select_card = null;
-        }else{
-          this.selected_tokumon_cards.push(c);
-          this.recent_select_card = c;
-        }
-      },
-      selectDummyCard : function(c){
-        if (this.selected_dummy_cards.includes(c)){
-          this.selected_dummy_cards = this.selected_dummy_cards.filter(n => n !== c);
-        }else{
-          this.selected_dummy_cards.push(c);
-        }        
-      },
-      selectFillNACard : function(c){
-        if (this.selected_fillna_cards.includes(c)){
-          this.selected_fillna_cards = this.selected_fillna_cards.filter(n => n !== c);
-        }else{
-          this.selected_fillna_cards.push(c);
-        }      
-      },
-      tokumonImgCss : function(c){
-        if (this.selected_tokumon_cards.includes(c)){
-          return ['selected'];
-        }else{
-          return ['nonselect'];
-        }
-      },
-      dummyImgCss : function(c){
-        if (this.selected_dummy_cards.includes(c)){
-          return ['dummy_selected'];
-        }else if(this.recent_select_card == c && c.is_dummy){
-          return ['dummy_nonselect'];
-        }else{
-          return ['dummy_none'];
-        }
-      },
-      fillNAImgCss : function(c){
-        if (this.selected_fillna_cards.includes(c)){
-          return ['fillna_selected'];
-        }else if(this.recent_select_card == c && c.is_na){
-          return ['fillna_nonselect'];
-        }else{
-          return ['fillna_none'];
-        }
-      },
-      tokumonCardImgStyle: function(c){
-        return "top: " + (c.no-1)*90 + "px;";
-      },
-      tokumonImgFile : function(c){
-        return './img/tokumon' + c.no + '.png';
-      },
-      algorithmCardImgStyle: function(c){
-        return "top: " + (c.id-1)*45 + "px;";
-      },
-      selectAlgorithmCard : function(c){
-        this.selected_algorithm_card = c;
-      },
-      algorithmImgCss : function(c){
-        if (this.selected_algorithm_card == c){
-          return ['selected'];
-        }else{
-          return ['nonselect'];
-        }
-      },
-      algorithmImgFile : function(c){
-        return './img/algorithm' + c.id + '.png';
-      },
-      getCalcScore: function(){
-        if(window.location.host==""){
-          url = 'http://localhost:5000/calc?';
-        }else{
-          url = 'https://tokumon.roudoujin.net/calc?';
-        }
-        url = url + "tokumon="  + this.selected_tokumon_cards.map(c => c.identifier);
-        url = url + "&dummy="  + this.selected_dummy_cards.map(c => c.identifier);
-        url = url + "&fillna="  + this.selected_fillna_cards.map(c => c.identifier);
-        url = url + "&algorithm=" + this.selected_algorithm_card.id;
-        this.score = null;
-        this.isLoading = true;
-        console.log(url)
-        axios
-          .get(url)
-          .then(response => {
-              this.score = response.data;
-              this.isLoading = false;
-          });
+      result_selected_tokumon_cards: [],
+      result_selected_dummy_cards: [],
+      result_selected_fillna_cards: [],
+      result_selected_algorithm_card: null,
+    }
+  },
+  methods: {
+    selectTokumonCard : function(c){
+      if (this.selected_tokumon_cards.includes(c)){
+        this.selected_tokumon_cards = this.selected_tokumon_cards.filter(n => n !== c);
+        this.selected_dummy_cards = this.selected_dummy_cards.filter(n => n !== c);
+        this.selected_fillna_cards = this.selected_fillna_cards.filter(n => n !== c);
+        this.recent_select_card = null;
+      }else{
+        this.selected_tokumon_cards.push(c);
+        this.recent_select_card = c;
       }
     },
-    computed: {
-      isButtonDisable : function(){
-        if(this.selected_algorithm_card != null &&
-           this.selected_tokumon_cards.length >= 1 &&
-           !this.isLoading){
-          return false;
-        }else{
-          return true;
-        }
-      },
-      hasScore : function(){
-        return (this.score!=null);
-      },
-      getAccuracy : function(){
-        if(this.score!=null){
-          return this.score['accuracy'];
-        }else{
-          return '';
-        }
-      },
+    selectDummyCard : function(c){
+      if (this.selected_dummy_cards.includes(c)){
+        this.selected_dummy_cards = this.selected_dummy_cards.filter(n => n !== c);
+      }else{
+        this.selected_dummy_cards.push(c);
+      }        
     },
-  })
+    selectFillNACard : function(c){
+      if (this.selected_fillna_cards.includes(c)){
+        this.selected_fillna_cards = this.selected_fillna_cards.filter(n => n !== c);
+      }else{
+        this.selected_fillna_cards.push(c);
+      }      
+    },
+    tokumonImgCss : function(c){
+      if (this.selected_tokumon_cards.includes(c)){
+        return ['selected'];
+      }else{
+        return ['nonselect'];
+      }
+    },
+    dummyImgCss : function(c){
+      if (this.selected_dummy_cards.includes(c)){
+        return ['dummy_selected'];
+      }else if(this.recent_select_card == c && c.is_dummy){
+        return ['dummy_nonselect'];
+      }else{
+        return ['dummy_none'];
+      }
+    },
+    fillNAImgCss : function(c){
+      if (this.selected_fillna_cards.includes(c)){
+        return ['fillna_selected'];
+      }else if(this.recent_select_card == c && c.is_na){
+        return ['fillna_nonselect'];
+      }else{
+        return ['fillna_none'];
+      }
+    },
+    tokumonCardImgStyle: function(c){
+      return "top: " + (c.no-1)*90 + "px;";
+    },
+    tokumonImgFile : function(c){
+      return './img/tokumon' + c.no + '.png';
+    },
+    algorithmCardImgStyle: function(c){
+      return "top: " + (c.id-1)*45 + "px;";
+    },
+    selectAlgorithmCard : function(c){
+      this.selected_algorithm_card = c;
+    },
+    algorithmImgCss : function(c){
+      if (this.selected_algorithm_card == c){
+        return ['selected'];
+      }else{
+        return ['nonselect'];
+      }
+    },
+    algorithmImgFile : function(c){
+      return './img/algorithm' + c.id + '.png';
+    },
+    getCalcScore: function(){
+      if(window.location.host==""){
+        url = 'http://localhost:5000/calc?';
+      }else{
+        url = 'https://tokumon.roudoujin.net/calc?';
+      }
+      url = url + "tokumon="  + this.selected_tokumon_cards.map(c => c.identifier);
+      url = url + "&dummy="  + this.selected_dummy_cards.map(c => c.identifier);
+      url = url + "&fillna="  + this.selected_fillna_cards.map(c => c.identifier);
+      url = url + "&algorithm=" + this.selected_algorithm_card.id;
+      this.score = null;
+      this.isLoading = true;
+      this.result_selected_tokumon_cards = this.selected_tokumon_cards;
+      this.result_selected_dummy_cards = this.selected_dummy_cards;
+      this.result_selected_fillna_cards = this.selected_fillna_cards;
+      this.result_selected_algorithm_card = this.selected_algorithm_card;
+      console.log(url)
+      axios
+        .get(url)
+        .then(response => {
+            this.score = response.data;
+            this.isLoading = false;
+        });
+    },
+    getTokumonList : function(c){
+      var result = c.name;
+
+      if(this.result_selected_dummy_cards.includes(c)){
+        result = result + "＋ダミーへんすうか"
+      }
+
+      if(this.result_selected_fillna_cards.includes(c)){
+        result = result + "＋けっそんちほかん"
+      }
+
+      return result;
+
+    },
+  },
+  computed: {
+    isButtonDisable : function(){
+      if(this.selected_algorithm_card != null &&
+         this.selected_tokumon_cards.length >= 1 &&
+         !this.isLoading){
+        return false;
+      }else{
+        return true;
+      }
+    },
+    hasScore : function(){
+      return (this.score!=null);
+    },
+    getAccuracy : function(){
+      if(this.score!=null){
+        return this.score['accuracy'];
+      }else{
+        return '';
+      }
+    },
+    getResultAlgolithmName : function(){
+      if(this.result_selected_algorithm_card != null){
+        return this.result_selected_algorithm_card.name;
+      }else{
+        return; 
+      }
+    },
+  },
+  template: '#card-component',
+})
+
+var players = new Vue({
+  el: '#players',
+});
