@@ -30,6 +30,7 @@
     --base-color: white;
     --viewport-width: 480px;
     --content-width: 450px;
+    --ability-left: 290px;
 }
 
 a {
@@ -74,6 +75,7 @@ h2{
 }
 
 .card-stack .nonselect {
+    left: 10px;
     transform:translateX(0px);
     transition-timing-function:ease-out;	
 	transition-duration:0.2s;
@@ -81,7 +83,8 @@ h2{
     opacity:0.8;
 }
 .card-stack .selected {
-    transform:translateX(133px);
+    left: 10px;
+    transform:translateX(123px);
     transition-timing-function:ease-out;	
 	transition-duration:0.2s;
     background-color: red;
@@ -117,8 +120,8 @@ h2{
 }
 
 .dummy_selected{
-    left: 310px;
-    transform:translateX(-100px);
+    left: var(--ability-left);
+    transform:translateX(-80px);
     transition-timing-function:ease-out;	
     top: 10px;
     opacity:1;
@@ -128,7 +131,7 @@ h2{
     pointer-events: auto;
 }
 .dummy_none {
-    left: 310px;
+    left: var(--ability-left);
     transform:translateX(0px);
     top: 10px;
     opacity:0;
@@ -137,7 +140,7 @@ h2{
 }
 
 .dummy_nonselect {
-    left: 310px;
+    left: var(--ability-left);
     top: 10px;
     transition-duration:0.2s;
     opacity:0.5;
@@ -146,8 +149,8 @@ h2{
 
 }
 .fillna_selected{
-    left: 310px;
-    transform:translateX(-100px);
+    left: var(--ability-left);
+    transform:translateX(-80px);
     transition-timing-function:ease-out;	
     top: 50px;
     opacity:1;
@@ -157,7 +160,7 @@ h2{
     pointer-events: auto;
 }
 .fillna_none{
-    left: 310px;
+    left: var(--ability-left);
     top: 50px;
     opacity:0;
     transition-duration:0.2s;
@@ -166,7 +169,7 @@ h2{
 }
 
 .fillna_nonselect {
-    left: 310px;
+    left: var(--ability-left);
     top: 50px;
     transition-duration:0.2s;
     opacity:0.5;
