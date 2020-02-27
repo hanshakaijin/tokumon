@@ -32,6 +32,10 @@
     --content-width: 450px;
 }
 
+a {
+    text-decoration: underline;
+}
+
 body {
     --webkit-text-size-adjust: 100%;
     width: var(--viewport-width);
@@ -48,9 +52,8 @@ h2{
     text-align: center;
 }
 
-#cards{
-    background-color: var(--base-color);
-
+#players{
+    overflow-x: hidden;
 }
 
 .card-arrange-tokumon{
@@ -245,7 +248,6 @@ h2{
             <p class="h3">Tokumon Center ONLINE</p>
         </h1>
 
-
         <div id="players">
             <b-card no-body class="mb-1">
                 <b-card-header header-tag="header" class="p-1">
@@ -277,7 +279,8 @@ h2{
         </div>
         <footer class="footer">
             <div class="container">
-                <p class="mt-3 mb-0"><a class="text-light" href="http://bit.ly/tokumon">『特徴量モンスター』について</a></p>
+                <p class="mt-3 mb-0">『特徴量モンスター』については<a class="text-light" href="http://bit.ly/tokumon">こちら</a></p>
+                <p class="mb-0">ソースコードは<a class="text-light" href="https://github.com/hanshakaijin/tokumon">こちら</a></p>
                 <p class="mt-0">制作：<a class="text-light" href="http://roudoujin.net/">反社会人サークル</a></p>
             </div>
         </footer>
