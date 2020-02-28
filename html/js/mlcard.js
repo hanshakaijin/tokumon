@@ -257,6 +257,15 @@ Vue.component('player', {
         return true;
       }
     },
+    isButtonVariant : function(){
+      if(this.selected_algorithm_card != null &&
+         this.selected_tokumon_cards.length >= 1 &&
+         !this.isLoading){
+        return 'danger';
+      }else{
+        return 'secondary';
+      }
+    },
     hasScore : function(){
       return (this.score!=null);
     },
