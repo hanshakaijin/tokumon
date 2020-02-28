@@ -100,7 +100,6 @@ class MlCard():
         features['name_honorific'] = features['name_honorific'].astype('category').cat.codes
         features['boat'] = features['boat'].astype('category').cat.codes
 
-        print(features["cabin_isodd_fill_median"])
         for f in ['embarked', 'home.dest', 'cabin_head', 'cabin_isodd', 'boat']:
             features[f + "_fill_median"] = features[f + "_fill_median"].astype('category').cat.codes
         
@@ -151,9 +150,9 @@ class MlCard():
 
         result = cross_validate(self.clf_s[algorithm-1], self.features.loc[:, use_features_dummy], self.target, cv = kfold, scoring = score_funcs)
         score = {}
-        print(use_features_dummy)
+        #print(use_features_dummy)
         for s in score_funcs:
-            print(self.clf_s[algorithm-1].__class__.__name__ + ": " + str(result['test_' + s].mean()))
+            #print(self.clf_s[algorithm-1].__class__.__name__ + ": " + str(result['test_' + s].mean()))
             score[s] = result['test_' + s].mean()
         return score
         
