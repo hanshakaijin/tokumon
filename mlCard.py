@@ -100,6 +100,7 @@ class MlCard():
         features['name_honorific'] = features['name_honorific'].astype('category').cat.codes
         features['boat'] = features['boat'].astype('category').cat.codes
 
+        print(features["cabin_isodd_fill_median"])
         for f in ['embarked', 'home.dest', 'cabin_head', 'cabin_isodd', 'boat']:
             features[f + "_fill_median"] = features[f + "_fill_median"].astype('category').cat.codes
         

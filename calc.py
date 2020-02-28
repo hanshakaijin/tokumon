@@ -10,6 +10,10 @@ def c():
     algorithm = request.args.get('algorithm')
     dummy = request.args.get('dummy').split(',')
     fillna = request.args.get('fillna').split(',')
+
+    #ignore dummy at 2 types category feature
+    if 'cabin_isodd' in dummy:
+        dummy.remove('cabin_isodd')
     
     features = [(t+"_fill_median" if (t in fillna) else t) for t in tokumon]
     features = [(t+"_dummy" if (t.replace("_fill_median", '') in dummy) else t) for t in features]
