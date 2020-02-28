@@ -224,7 +224,7 @@ Vue.component('player', {
       this.result_selected_dummy_cards = this.selected_dummy_cards;
       this.result_selected_fillna_cards = this.selected_fillna_cards;
       this.result_selected_algorithm_card = this.selected_algorithm_card;
-      console.log(url)
+      //console.log(url)
       axios
         .get(url)
         .then(response => {
