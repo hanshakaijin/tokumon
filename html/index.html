@@ -245,7 +245,7 @@ h2{
                     </div>
                 </div>
                 <div class="m-3">
-                    <b-button v-on:click="getCalcScore" class="btn-lg btn-block" :variant="isButtonVariant" :disabled="isButtonDisable">計算！</b-button>
+                    <b-button v-on:click="getCalcScore" class="btn-lg btn-block" label="Loding" :variant="isButtonVariant" :disabled="isButtonDisable">計算！</b-button>
                 </div>
             </b-collapse>
             <div class="score-area">
@@ -258,11 +258,11 @@ h2{
                     <p classs="my-1" >
                         <small>選んだトクモン: </small>
                         <span v-for="card in result_selected_tokumon_cards">
-                            <span class="badge bg-warning">{{ getTokumonList(card) }}</span>&nbsp;
+                            <span class="badge badge-warning">{{ getTokumonList(card) }}</span>&nbsp;
                         </span>
                         <br />
                         <small>選んだアルゴリズムマシン: </small>
-                        <span class="badge bg-info">{{ getResultAlgolithmName }}</span>
+                        <span class="badge badge-info">{{ getResultAlgolithmName }}</span>
                     </p>
                 </div>
             </div>
